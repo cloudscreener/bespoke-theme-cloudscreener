@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/cloudscreener/bespoke-theme-cloudscreener.png?branch=master)](https://travis-ci.org/cloudscreener/bespoke-theme-cloudscreener)
+<!-- [![Build Status](https://secure.travis-ci.org/cloudscreener/bespoke-theme-cloudscreener.png?branch=master)](https://travis-ci.org/cloudscreener/bespoke-theme-cloudscreener) -->
 
 # bespoke-theme-cloudscreener
 
@@ -54,4 +54,4 @@ This theme was built with [generator-bespoketheme](https://github.com/markdalgle
 
 ## License
 
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
+See [LICENSE file](https://raw.githubusercontent.com/cloudscreener/bespoke-theme-cloudscreener/master/LICENSE).
