@@ -27,15 +27,16 @@ gulp.task('default', ['clean', 'compile']);
 gulp.task('demo', ['compile', 'watch', 'connect']);
 gulp.task('compile', ['compile:lib', 'compile:demo']);
 gulp.task('compile:lib', ['stylus', 'browserify:lib']);
-gulp.task('compile:demo', ['jade', 'browserify:demo']);
+gulp.task('compile:demo', ['jade', 'images', 'browserify:demo']);
 
 gulp.task('watch', function() {
   gulp.watch('lib/*', ['compile:lib', 'browserify:demo']);
+  gulp.watch('lib/images/**/*', ['images']);
   gulp.watch('demo/src/*.jade', ['jade']);
   gulp.watch('demo/src/**/*.js', ['browserify:demo']);
 });
 
-gulp.task('clean', ['clean:browserify', 'clean:stylus', 'clean:jade', 'clean:tildes']);
+gulp.task('clean', ['clean:browserify', 'clean:stylus', 'clean:jade', 'clean:tildes', 'clean:images']);
 gulp.task('clean:browserify', ['clean:browserify:lib', 'clean:browserify:demo']);
 
 gulp.task('clean:browserify:lib', function() {
@@ -60,6 +61,11 @@ gulp.task('clean:jade', function() {
 
 gulp.task('clean:tildes', function() {
   return gulp.src(['**/*~'], { read: false })
+    .pipe(clean());
+});
+
+gulp.task('clean:images', function() {
+  return gulp.src(['demo/dist/images'], { read: false })
     .pipe(clean());
 });
 
@@ -115,6 +121,12 @@ gulp.task('jade', ['clean:jade'], function() {
     .pipe(isDemo ? plumber() : through())
     .pipe(jade({ pretty: true }))
     .pipe(gulp.dest('demo/dist'))
+    .pipe(connect.reload());
+});
+
+gulp.task('images', ['clean:images'], function() {
+  return gulp.src('lib/images/**/*')
+    .pipe(gulp.dest('demo/dist/images'))
     .pipe(connect.reload());
 });
 

@@ -10,9 +10,33 @@ html
 
     article
 
-      section
-        h1 bespoke-theme-cloudscreener
-        h2 A Bespoke.js theme by <a href="https://github.com/cloudscreener">CloudScreener</a>
+      section(class='nologo')
+        p
+          img(src='../images/cloudscreener_logo_CMJN_fonce.png', width='300px')
+        h2 bespoke-theme-cloudscreener
+        h3 A Bespoke.js theme by
+          | <a href="https://github.com/Val">Laurent Vallar</a>
+
+      section(class='cascade nologo')
+        .avatar(style='background-image:url(../images/Jcubic_avatar.svg)')
+        h3 <a href="https://commons.wikimedia.org/wiki/File:Jcubic_avatar.svg">
+          | Jcubic avatar.svg</a> public domain avatar
+        h4 shown in &ldquo;cascade&rdquo; mode
+
+      section(data-bespoke-backdrop='black', class='star-wars')
+        h1 Test <br /> Star Wars
+
+      section(data-bespoke-backdrop='black', class='star-wars')
+        h3 A long time ago, in a galaxy far, far away…
+
+      section(data-bespoke-backdrop='black', class='star-wars')
+        h3 It is a period of civil war. Rebel <br />
+          | spaceships, striking from a hidden <br />
+          | base, have won their first victory <br />
+          | against the evil Galactic Empire.
+
+      section(data-bespoke-backdrop='black', class='star-wars')
+        h3 Ok, ok. <br /><br />Go on with a more classical presentation…
 
       section
         h1.bullet Paragraph
@@ -25,8 +49,28 @@ html
           li Etiam hendrerit nunc ut tortor interdum faucibus.
           li Nulla eget nibh et enim sagittis dictum.
 
+      section(class="nologo")
+        h1 NoLogo slide
+        pre(style="font-size: 140%")
+          code.language-css.
+            section(class="nologo")
+        br
+        h3 syntax highlighting (prism) <br />
+          | via bespoke generator (yeoman)
+
       section.emphatic-text(data-bespoke-backdrop='emphatic')
         h1 Emphatic Slide
+
+      section(data-bespoke-backdrop='office-visuel-press',
+        | class='transparent-slide nologo')
+        div(style="color: lightgray", class="background-gif shadow-text")
+          h2 bespoke-backdrop
+          h3 CloudScreener Office
+
+      section(class='nologo transparent-slide shadow-text')
+        h2(style="color: lightgray") iframe support
+        br
+        iframe(data-src="http://www.cloudscreener.com")
 
       section
         h1.bullet Enjoy <span class='bullet'>:)</span>

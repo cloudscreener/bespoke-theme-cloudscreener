@@ -3,16 +3,155 @@
 
 @import 'normalizecss/normalize.css'
 
+slide_width = 640px
+slide_height = 480px
+
+slide_background = #eaeaea
+slide_transition_length = .6s
+slide_transition_easing = ease
+// slide_transition_rotate_y = 90deg
+slide_transition_rotate_y = 20deg
+// Safari bugs out on 3d transform-origins, so we have to fake it
+// slide_transition_nudge_x = -100px
+slide_transition_nudge_x = -640px
+
+bullet_transition_length = .3s
+bullet_transition_easing = ease
+bullet_transition_translate_x = 16px
+
+transform_before = translateX(slide_transition_nudge_x * -1)
+transform_before = transform_before translateX(slide_width /-2)
+transform_before = transform_before rotateY(slide_transition_rotate_y * -1)
+transform_before = transform_before translateX(slide_width / -2)
+
+transform_after = translateX(slide_transition_nudge_x)
+transform_after = transform_after translateX(slide_width / 2)
+transform_after = transform_after rotateY(slide_transition_rotate_y)
+transform_after = transform_after translateX(slide_width / 2)
+
+// base
+
+*
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+
+@media print
+  *
+    -webkit-print-color-adjust: exact
+
+@page
+  size: landscape
+  margin: 0
+
+// bespoke.js layout styles
+
 .bespoke-parent
   text-size-adjust: auto
+  transition: background slide_transition_length slide_transition_easing
   position: absolute
   top: 0
   left: 0
   right: 0
   bottom: 0
   overflow: hidden
+  @media print
+    overflow: visible
+    position: static
+
+.bespoke-theme-cloudscreener-slide-parent
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  perspective: 600px
+  pointer-events: none
+  .bespoke-active
+    pointer-events: auto
+
+.bespoke-slide
+  pointer-events: auto
+  transition:
+    transform slide_transition_length slide_transition_easing,
+    opacity slide_transition_length slide_transition_easing,
+    background slide_transition_length slide_transition_easing
+  transform-origin: 50% 50% 0
+  transform: translate3d(0,0,0)
+  backface-visibility: hidden
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  text-align: center
+  width: slide_width
+  height: slide_height
+  position: absolute
+  top: 50%
+  margin-top: (slide_height / 2) * -1
+  left: 50%
+  margin-left: (slide_width / 2) * -1
+  background: slide_background
+  padding: 40px
+  -webkit-border-radius: 3%
+  -moz-border-radius: 3%
+  -ms-border-radius: 3%
+  -o-border-radius: 3%
+  border-radius: 3%
+  @media print
+    zoom: 1 !important // disable bespoke-scale
+    height: 743px // seems to correspond with an A4, landscape page height
+    width: 100%
+    page-break-before: always
+    position: static
+    margin: 0
+    transition: none
+
+.bespoke-before
+  transform: transform_before
+  @media print
+    transform: none
+
+.bespoke-after
+  transform: transform_after
+  @media print
+    transform: none
+
+.bespoke-slide:not(.nologo):not(.emphatic-text):not(.star-wars)::before
+  font-size: 12pt
+  content: ""
+  position: absolute
+  bottom: 20px
+  left: 25px
+  background: url(../images/cloudscreener_logo_CMJN_fonce_cloud_only.png) no-repeat 0 50%
+  -webkit-background-size: 52px 33px
+  -moz-background-size: 52px 33px
+  -o-background-size: 52px 33px
+  background-size: 52px 33px
+  padding-left: 52px
+  height: 33px
+  line-height: 1.9
+
+.bespoke-inactive
+  opacity: 0
+  pointer-events: none
+
+.bespoke-bullet-inactive
+  opacity: 0
+  li&
+    transform: translateX(bullet_transition_translate_x)
+    @media print
+      transform: none
+  @media print
+    opacity: 1
+
+.bespoke-bullet-active
+  opacity: 1
+
+// bespoke-scale styles
 
 .bespoke-scale-parent
+  perspective: 600px
   position: absolute
   top: 0
   left: 0
@@ -21,27 +160,34 @@
   pointer-events: none
   .bespoke-active
     pointer-events: auto
+  @media print
+    transform: none !important
 
-.bespoke-slide
-  width: 640px
-  height: 480px
+// bespoke-progress styles
+
+.bespoke-progress-parent
   position: absolute
-  top: 50%
-  left: 50%
-  margin-left: -(@width / 2)
-  margin-top: -(@height / 2)
-  display: flex
-  flex-direction: column
-  justify-content: center
-  align-items: center
+  top: 0
+  left: 0
+  right: 0
+  height: 2px
+  @media only screen and (min-width: 1366px)
+    height: 4px
+  @media print
+    display: none
 
-.bespoke-inactive
-  opacity: 0
-  pointer-events: none
+.bespoke-progress-bar
+  transition: width .6s ease
+  position: absolute
+  height: 100%
+  // background: #0089f3
+  background: brown
+  border-radius: 0 4px 4px 0
 
-.bespoke-bullet-inactive
-  opacity: 0
-  pointer-events: none
+// bespoke-backdrop styles
+
+.emphatic
+  background: slide_background
 
 .bespoke-backdrop
   position: absolute
@@ -49,27 +195,164 @@
   left: 0
   right: 0
   bottom: 0
-  z-index: -1
   opacity: 0
+  z-index: -1
+  background-size: cover
+  background-position: 50% 50%
+  // transform: translateZ(0)
+  transform: translateZ(0) scale(1.3)
+  // transition: opacity slide_transition_length slide_transition_easing
+  transition: opacity 1s ease, transform 6s ease
+  &-active
+    opacity: 1
+  &-active,
+  &-before
+    transform: translateZ(0)
+  &-before
+    transition-delay: .2s
+  &-active
+    opacity: 1
 
-.bespoke-backdrop-active
-  opacity: 1
+.bespoke-backdrop.black
+  background: black
+  &.bespoke-backdrop-before
+    transition-delay: 2s
 
-.bespoke-progress-parent
-  position: absolute
-  top: 0
-  left: 0
-  right: 0
-  height: .3vw
+.bespoke-backdrop.office-visuel-press
+  background-image: url('../images/office-visuel-press.png')
+  background-position: 0 0
+  &.bespoke-backdrop-active
+    opacity: 0.8
+  &.bespoke-backdrop-before
+    transition-delay: 2s
 
-.bespoke-progress-bar
-  position: absolute
-  height: 100%
-  background: #ccc
-  transition: width .6s ease
+.transparent-slide
+  background: none
 
-.emphatic
-  background: #222
+.background-gif &
+  display: inline-block
+  background: rgba(10,10,10,0.4)
+  padding: 20px 30px
 
-.emphatic-text
-  color: white
+.shadow-text
+  text-shadow: 0 2px 0 rgba(0,0,0,0.5)
+
+// prism styles
+
+pre
+  padding: 26px !important
+  border-radius: 8px
+  background: DimGray
+  color: AntiqueWhite
+
+// content styles
+
+body
+  font-family: helvetica, arial, sans-serif
+  font-size: 18px
+  color: #404040
+  background: #1d3036
+
+h1
+  font-size: 72px
+  line-height: 82px
+  letter-spacing: -2px
+  margin-bottom: 16px
+
+h2
+  font-size: 42px
+  letter-spacing: -1px
+  margin-bottom: 8px
+
+h3
+  font-size: 24px
+  font-weight: normal
+  margin-bottom: 24px
+
+h3 :not(.star-wars)
+  color: #606060
+
+hr
+  visibility: hidden
+  height: 20px
+
+ul
+  list-style: none
+
+li
+  margin-bottom: 12px
+
+p
+  margin: 0 100px 12px
+  line-height: 22px
+
+a
+  color: #0089f3
+  text-decoration: none
+
+iframe
+  width: 110%
+  height: 110%
+  border: 1px solid #e6e6e6
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+// custom styles (see demo)
+
+.avatar
+  filter: grayscale(30%)
+  width: 120px
+  height: @width
+  border-radius: 100%
+  margin: .5em 0
+  background-size: cover
+  background-position: 50% 50%
+  border: 2px solid white
+
+cascade(index)
+  .5s + (index * .3s)
+
+.cascade
+  & > *
+    transition: all .8s ease
+    transform: translateZ(0)
+    opacity: 1
+    .bespoke-active &,
+    .bespoke-active&
+      transition-delay: cascade(0)
+      &:nth-child(2)
+        transition-delay: cascade(1)
+      &:nth-child(3)
+        transition-delay: cascade(2)
+      &:nth-child(4)
+        transition-delay: cascade(3)
+      &:nth-child(5)
+        transition-delay: cascade(4)
+      &:nth-child(6)
+        transition-delay: cascade(5)
+      &:nth-child(7)
+        transition-delay: cascade(6)
+    .bespoke-after &,
+    .bespoke-after&
+      transform: translateZ(0) translateY(15px)
+      opacity: 0
+      &.avatar
+        transform: translateZ(0) translateY(15px) scale(1.2) rotateX(30deg)
+
+star-wars(index)
+  2s
+
+.star-wars
+  background: transparent
+  color: yellow
+  &.bespoke-slide
+    transform: rotateX(20deg) translateY(0px)
+    &.bespoke-after
+      transform: rotateX(20deg) translateY(250px)
+    &.bespoke-before
+      transform: rotateX(20deg) translateY(-250px)
+    .bespoke-bullet
+      transition: all .6s ease
+    .bespoke-bullet-inactive
+      transform: translateY(20px)
