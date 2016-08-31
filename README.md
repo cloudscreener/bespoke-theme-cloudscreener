@@ -2,7 +2,7 @@
 
 # bespoke-theme-cloudscreener
 
-CloudScreener theme for [Bespoke.js](http://markdalgleish.com/projects/bespoke.js) &mdash; [View demo](http://cloudscreener.github.io/bespoke-theme-cloudscreener)
+CloudScreener theme for [Bespoke.js](http://markdalgleish.com/projects/bespoke.js) &mdash; [View demo](http://cloudscreener.github.io/bespoke-theme-cloudscreener/demo/dist)
 
 ## Download
 
